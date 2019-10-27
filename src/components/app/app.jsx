@@ -1,11 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {GreetingScreen} from "../greeting-screen/greeting-screen.jsx";
 
-export const App = () => {
-  // const {timeLimits, mistakesLimits} = props;
+export const App = (props) => {
+  const {timeLimits, mistakesLimits} = props;
 
   return <GreetingScreen
-    timeLimits = {7}
-    mistakeLimits = {4}
+    timeLimits = {timeLimits}
+    mistakeLimits = {mistakesLimits}
   />;
+};
+
+App.propTypes = {
+  timeLimits: PropTypes.number.isRequired,
+  mistakesLimits: PropTypes.number.isRequired,
 };
