@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {GreetingScreen} from "../greeting-screen/greeting-screen.jsx";
 
 export const App = () => {
@@ -8,4 +9,9 @@ export const App = () => {
     // timeLimits = {timeLimits}
     // mistakeLimits = {mistakesLimits}
   />;
+};
+
+App.propTypes = {
+  timeLimits: PropTypes.number.isRequired,
+  mistakesLimits: PropTypes.number.isRequired,
 };

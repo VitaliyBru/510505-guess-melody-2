@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const GreetingScreen = () => {
   // const {timeLimits, mistakesLimits} = props;
@@ -14,4 +15,9 @@ export const GreetingScreen = () => {
     </ul>
     <p className="welcome__text">Удачи!</p>
   </section>;
+};
+
+GreetingScreen.propTypes = {
+  timeLimits: PropTypes.number.isRequired,
+  mistakesLimits: PropTypes.number.isRequired,
 };
