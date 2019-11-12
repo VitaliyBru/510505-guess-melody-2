@@ -1,17 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {App} from "./components/app/app.jsx";
+import {questions, gameSettings} from "./mocks/questions";
 
 const init = () => {
-  const gameSettings = {
-    timeLimits: 5,
-    mistakesLimits: 3,
-  };
-
   ReactDOM.render(
       <App
         timeLimits = {gameSettings.timeLimits}
         mistakesLimits = {gameSettings.mistakesLimits}
+        questions={questions}
       />,
       document.querySelector(`#root`)
   );

@@ -8,6 +8,31 @@ it(`App correctly renders after relaunch`, () => {
         <App
           timeLimits={0}
           mistakesLimits={0}
+          questions={[
+            {
+              type: `artist`,
+              song: {
+                artist: `  `,
+                src: ` `
+              },
+              answers: [
+                {
+                  picture: ` `,
+                  genre: ` `
+                }
+              ]
+            },
+            {
+              type: `genre`,
+              genre: ` `,
+              answers: [
+                {
+                  src: ` `,
+                  genre: ` `
+                }
+              ]
+            }
+          ]}
         />
     )
     .toJSON();
