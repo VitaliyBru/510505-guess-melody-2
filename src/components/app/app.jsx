@@ -16,17 +16,15 @@ export class App extends PureComponent {
 
     const currentQuestion = props.questions[questionId];
 
-    if (currentQuestion.type === `artist`) {
-      return <GuessSinger
+    switch (currentQuestion.type) {
+      case `artist`: return <GuessSinger
         questionId = {questionId}
         song={currentQuestion.song}
         answers={currentQuestion.answers}
         onAnswerClick={onAnswer}
       />;
-    }
 
-    if (currentQuestion.type === `genre`) {
-      return <GuessGenre
+      case `genre`: return <GuessGenre
         questionId={questionId}
         genre={currentQuestion.genre}
         answers={currentQuestion.answers}
@@ -43,6 +41,8 @@ export class App extends PureComponent {
     this.state = {
       currentQuestionId: -1,
     };
+
+    this._handlerUserAnswer = this._handlerUserAnswer.bind(this);
   }
 
   render() {
@@ -51,12 +51,15 @@ export class App extends PureComponent {
     return App.getScreen(
         this.props,
         currentQuestionId,
-        () => {
-          this.setState((state, {questions: {length}}) => {
-            const nextQuestionId = state.currentQuestionId + 1;
-            return {currentQuestionId: length > nextQuestionId ? nextQuestionId : -1};
-          });
-        });
+        this._handlerUserAnswer
+    );
+  }
+
+  _handlerUserAnswer() {
+    this.setState((state, {questions: {length}}) => {
+      const nextQuestionId = state.currentQuestionId + 1;
+      return {currentQuestionId: length > nextQuestionId ? nextQuestionId : -1};
+    });
   }
 }
 
