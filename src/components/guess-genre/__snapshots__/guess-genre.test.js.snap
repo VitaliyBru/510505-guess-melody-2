@@ -94,13 +94,14 @@ exports[`GuessGenre screen correctly renders after relaunch 1`] = `
       >
         <button
           className="track__button track__button--play"
+          disabled={true}
+          onClick={[Function]}
           type="button"
         />
         <div
           className="track__status"
         >
           <audio
-            preload="none"
             src=" "
           />
         </div>

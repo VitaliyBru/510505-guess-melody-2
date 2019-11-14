@@ -3,6 +3,12 @@ import renderer from "react-test-renderer";
 import {GuessSinger} from "./guess-singer.jsx";
 
 it(`GuessSinger correctly renders after relaunch`, () => {
+  const createNodeMock = () => {
+    return {
+      oncanplaythrough
+    };
+  };
+
   const tree = renderer
     .create(
         <GuessSinger
@@ -20,7 +26,8 @@ it(`GuessSinger correctly renders after relaunch`, () => {
           onAnswerClick={
             jest.fn()
           }
-        />
+        />,
+        {createNodeMock}
     )
     .toJSON();
 
