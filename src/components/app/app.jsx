@@ -7,29 +7,35 @@ import {GuessGenre} from "../guess-genre/guess-genre.jsx";
 export class App extends PureComponent {
   static getScreen(props, questionId, onAnswer) {
     if (questionId < 0) {
-      return <GreetingScreen
-        timeLimits={props.timeLimits}
-        mistakesLimits={props.mistakesLimits}
-        onButtonClick={onAnswer}
-      />;
+      return (
+        <GreetingScreen
+          timeLimits={props.timeLimits}
+          mistakesLimits={props.mistakesLimits}
+          onButtonClick={onAnswer}
+        />
+      );
     }
 
     const currentQuestion = props.questions[questionId];
 
     switch (currentQuestion.type) {
-      case `artist`: return <GuessSinger
-        questionId = {questionId}
-        song={currentQuestion.song}
-        answers={currentQuestion.answers}
-        onAnswerClick={onAnswer}
-      />;
+      case `artist`: return (
+        <GuessSinger
+          questionId = {questionId}
+          song={currentQuestion.song}
+          answers={currentQuestion.answers}
+          onAnswerClick={onAnswer}
+        />
+      );
 
-      case `genre`: return <GuessGenre
-        questionId={questionId}
-        genre={currentQuestion.genre}
-        answers={currentQuestion.answers}
-        onAnswerClick={onAnswer}
-      />;
+      case `genre`: return (
+        <GuessGenre
+          questionId={questionId}
+          genre={currentQuestion.genre}
+          answers={currentQuestion.answers}
+          onAnswerClick={onAnswer}
+        />
+      );
     }
 
     return null;
