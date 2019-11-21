@@ -12,6 +12,8 @@ it(`GuessGenre form submit correct`, () => {
 
   const guessGenre = shallow(
       <GuessGenre
+        mistakes={0}
+        timeLeft={0}
         questionId={0}
         genre={` `}
         answers={[

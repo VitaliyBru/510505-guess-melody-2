@@ -12,6 +12,8 @@ it(`GuessGenre screen correctly renders after relaunch`, () => {
   const tree = renderer
     .create(
         <GuessGenre
+          mistakes={0}
+          timeLeft={0}
           questionId={0}
           genre={` `}
           answers={[

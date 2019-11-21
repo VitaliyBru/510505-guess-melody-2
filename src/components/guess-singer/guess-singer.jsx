@@ -1,6 +1,8 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {AudioPlayer} from "../audio-player/audio-player.jsx";
+import {GameMistakes} from "../game-mistakes/game-mistakes.jsx";
+import {TimerValue} from "../timer-value/timer-value.jsx";
 
 export class GuessSinger extends PureComponent {
   constructor(props) {
@@ -14,31 +16,24 @@ export class GuessSinger extends PureComponent {
   }
 
   render() {
-    const {questionId, song, answers, onAnswerClick} = this.props;
+    const {timeLeft, questionId, song, answers, mistakes, onAnswerClick} = this.props;
 
     return (
       <section className="game game--artist">
         <header className="game__header">
-          <a className="game__back" href="#"/>
-          <span className="visually-hidden">Сыграть ещё раз</span>
-          <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
+          <a className="game__back" href="#">
+            <span className="visually-hidden">Сыграть ещё раз</span>
+            <img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
+          </a>
 
           <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
             <circle className="timer__line" cx="390" cy="390" r="370"
               style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}}/>
           </svg>
 
-          <div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-            <span className="timer__mins">05</span>
-            <span className="timer__dots">:</span>
-            <span className="timer__secs">00</span>
-          </div>
+          <TimerValue timeLeft={timeLeft}/>
 
-          <div className="game__mistakes">
-            <div className="wrong"/>
-            <div className="wrong"/>
-            <div className="wrong"/>
-          </div>
+          <GameMistakes mistakes={mistakes}/>
         </header>
 
         <section className="game__screen">
@@ -80,6 +75,7 @@ export class GuessSinger extends PureComponent {
 }
 
 GuessSinger.propTypes = {
+  timeLeft: PropTypes.number.isRequired,
   questionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   song: PropTypes.shape({
     artist: PropTypes.string,
@@ -89,5 +85,6 @@ GuessSinger.propTypes = {
     picture: PropTypes.string,
     artist: PropTypes.string
   })).isRequired,
+  mistakes: PropTypes.number.isRequired,
   onAnswerClick: PropTypes.func.isRequired
 };

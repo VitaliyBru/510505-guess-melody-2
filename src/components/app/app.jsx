@@ -1,39 +1,60 @@
+import {connect} from "react-redux";
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {GreetingScreen} from "../greeting-screen/greeting-screen.jsx";
 import {GuessSinger} from "../guess-singer/guess-singer.jsx";
 import {GuessGenre} from "../guess-genre/guess-genre.jsx";
+import {ActionCreator} from "../../reducer.js";
 
-export class App extends PureComponent {
-  static getScreen(props, questionId, onAnswer) {
-    if (questionId < 0) {
+const ONE_SECOND = 1000;
+const SECONDS_IN_MINUTE = 60;
+
+class App extends PureComponent {
+  static getScreen(props) {
+    const {
+      step,
+      timeLimits,
+      mistakesLimits,
+      onGreetingScreenClick
+    } = props;
+
+    if (step < 0) {
       return (
         <GreetingScreen
-          timeLimits={props.timeLimits}
-          mistakesLimits={props.mistakesLimits}
-          onButtonClick={onAnswer}
+          timeLimits={timeLimits}
+          mistakesLimits={mistakesLimits}
+          onButtonClick={onGreetingScreenClick}
         />
       );
     }
 
-    const currentQuestion = props.questions[questionId];
+    const currentQuestion = props.questions[step];
+    const {
+      timeLeft,
+      mistakes,
+      onUserAnswer,
+    } = props;
 
     switch (currentQuestion.type) {
       case `artist`: return (
         <GuessSinger
-          questionId = {questionId}
+          timeLeft={timeLeft}
+          questionId = {step}
           song={currentQuestion.song}
           answers={currentQuestion.answers}
-          onAnswerClick={onAnswer}
+          mistakes={mistakes}
+          onAnswerClick={(userAnswer) => onUserAnswer(userAnswer, currentQuestion, mistakes, mistakesLimits)}
         />
       );
 
       case `genre`: return (
         <GuessGenre
-          questionId={questionId}
+          timeLeft={timeLeft}
+          questionId={step}
           genre={currentQuestion.genre}
           answers={currentQuestion.answers}
-          onAnswerClick={onAnswer}
+          mistakes={mistakes}
+          onAnswerClick={(userAnswer) => onUserAnswer(userAnswer, currentQuestion, mistakes, mistakesLimits)}
         />
       );
     }
@@ -44,33 +65,72 @@ export class App extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      currentQuestionId: -1,
-    };
+    this.timerIsRun = false;
 
-    this._handlerUserAnswer = this._handlerUserAnswer.bind(this);
+    this._runOneSecTimer = this._runOneSecTimer.bind(this);
   }
 
   render() {
-    const {currentQuestionId} = this.state;
-
-    return App.getScreen(
-        this.props,
-        currentQuestionId,
-        this._handlerUserAnswer
-    );
+    return App.getScreen(this.props);
   }
 
-  _handlerUserAnswer() {
-    this.setState((state, {questions: {length}}) => {
-      const nextQuestionId = state.currentQuestionId + 1;
-      return {currentQuestionId: length > nextQuestionId ? nextQuestionId : -1};
-    });
+  componentDidMount() {
+    const {setTimer, timeLimits} = this.props;
+    setTimer(timeLimits * SECONDS_IN_MINUTE);
+  }
+
+  componentDidUpdate() {
+    const {step, setTimer, timeLimits} = this.props;
+    if (step < 0) {
+      this.timerIsRun = false;
+      setTimer(timeLimits * SECONDS_IN_MINUTE);
+    } else if (!this.timerIsRun) {
+      this.timerIsRun = true;
+      setTimeout(this._runOneSecTimer, ONE_SECOND);
+    }
+  }
+
+  _runOneSecTimer() {
+    const {timeLeft, decrementTimeByOneSec, step} = this.props;
+    if (step >= 0) {
+      decrementTimeByOneSec(timeLeft);
+      setTimeout(this._runOneSecTimer, ONE_SECOND);
+    }
   }
 }
 
 App.propTypes = {
+  step: PropTypes.number.isRequired,
+  mistakes: PropTypes.number.isRequired,
+  timeLeft: PropTypes.number.isRequired,
   timeLimits: PropTypes.number.isRequired,
   mistakesLimits: PropTypes.number.isRequired,
-  questions: PropTypes.arrayOf(PropTypes.object).isRequired
+  questions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onGreetingScreenClick: PropTypes.func.isRequired,
+  onUserAnswer: PropTypes.func.isRequired,
+  setTimer: PropTypes.func.isRequired,
+  decrementTimeByOneSec: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  step: state.step,
+  mistakes: state.mistakes,
+  timeLeft: state.time,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onGreetingScreenClick: () => dispatch(ActionCreator.incrementStep()),
+
+  onUserAnswer: (userAnswer, question, mistakes, mistakesLimit) => {
+    dispatch(ActionCreator.incrementStep());
+    dispatch(ActionCreator.incrementMistakes(userAnswer, question, mistakes, mistakesLimit));
+  },
+
+  setTimer: (timeLimits) => dispatch(ActionCreator.setTimer(timeLimits)),
+
+  decrementTimeByOneSec: (timeLeft) => dispatch(ActionCreator.decrementTime(timeLeft)),
+});
+
+export {App};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -10,17 +10,18 @@ exports[`GuessSinger correctly renders after relaunch 1`] = `
     <a
       className="game__back"
       href="#"
-    />
-    <span
-      className="visually-hidden"
     >
-      Сыграть ещё раз
-    </span>
-    <img
-      alt="Угадай мелодию"
-      className="game__logo"
-      src="img/melody-logo-ginger.png"
-    />
+      <span
+        className="visually-hidden"
+      >
+        Сыграть ещё раз
+      </span>
+      <img
+        alt="Угадай мелодию"
+        className="game__logo"
+        src="img/melody-logo-ginger.png"
+      />
+    </a>
     <svg
       className="timer"
       viewBox="0 0 780 780"
@@ -47,7 +48,7 @@ exports[`GuessSinger correctly renders after relaunch 1`] = `
       <span
         className="timer__mins"
       >
-        05
+        00
       </span>
       <span
         className="timer__dots"
@@ -62,17 +63,7 @@ exports[`GuessSinger correctly renders after relaunch 1`] = `
     </div>
     <div
       className="game__mistakes"
-    >
-      <div
-        className="wrong"
-      />
-      <div
-        className="wrong"
-      />
-      <div
-        className="wrong"
-      />
-    </div>
+    />
   </header>
   <section
     className="game__screen"

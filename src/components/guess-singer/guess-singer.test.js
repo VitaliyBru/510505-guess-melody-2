@@ -12,6 +12,8 @@ it(`GuessSinger correctly renders after relaunch`, () => {
   const tree = renderer
     .create(
         <GuessSinger
+          mistakes={0}
+          timeLeft={0}
           questionId={0}
           song={{
             src: ` `,

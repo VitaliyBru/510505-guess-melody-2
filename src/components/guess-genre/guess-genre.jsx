@@ -1,16 +1,20 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {AudioPlayer} from "../audio-player/audio-player.jsx";
+import {GameMistakes} from "../game-mistakes/game-mistakes.jsx";
+import {TimerValue} from "../timer-value/timer-value.jsx";
 
 export class GuessGenre extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {activePlayer: 0};
+
+    this._handlerSubmit = this._handlerSubmit.bind(this);
   }
 
   render() {
-    const {questionId, genre, answers, onAnswerClick} = this.props;
+    const {timeLeft, questionId, genre, mistakes, answers} = this.props;
 
     return (
       <section className="game game--genre">
@@ -25,28 +29,14 @@ export class GuessGenre extends PureComponent {
               style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}}/>
           </svg>
 
-          <div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-            <span className="timer__mins">05</span>
-            <span className="timer__dots">:</span>
-            <span className="timer__secs">00</span>
-          </div>
+          <TimerValue timeLeft={timeLeft}/>
 
-          <div className="game__mistakes">
-            <div className="wrong"/>
-            <div className="wrong"/>
-            <div className="wrong"/>
-          </div>
+          <GameMistakes mistakes={mistakes}/>
         </header>
 
         <section className="game__screen">
           <h2 className="game__title">Выберите {genre} треки</h2>
-          <form className="game__tracks" onSubmit={(evt) => {
-            evt.preventDefault();
-            const answersCheckedList = Array.from(evt.currentTarget.elements.answer).map((it) => {
-              return it.checked;
-            });
-            onAnswerClick(answersCheckedList);
-          }}>
+          <form className="game__tracks" onSubmit={this._handlerSubmit}>
             {
               answers.map((it, i) => {
                 return (
@@ -72,14 +62,22 @@ export class GuessGenre extends PureComponent {
       </section>
     );
   }
+
+  _handlerSubmit(evt) {
+    evt.preventDefault();
+    const answersCheckedList = Array.from(evt.currentTarget.elements.answer).map((it) => it.checked);
+    this.props.onAnswerClick(answersCheckedList);
+  }
 }
 
 GuessGenre.propTypes = {
+  timeLeft: PropTypes.number.isRequired,
   questionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   genre: PropTypes.string.isRequired,
   answers: PropTypes.arrayOf(PropTypes.shape({
     src: PropTypes.string.isRequired,
     genre: PropTypes.string.isRequired
   })).isRequired,
+  mistakes: PropTypes.number.isRequired,
   onAnswerClick: PropTypes.func.isRequired
 };
