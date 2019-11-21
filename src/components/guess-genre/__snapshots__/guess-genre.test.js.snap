@@ -48,7 +48,7 @@ exports[`GuessGenre screen correctly renders after relaunch 1`] = `
       <span
         className="timer__mins"
       >
-        05
+        00
       </span>
       <span
         className="timer__dots"
@@ -63,17 +63,7 @@ exports[`GuessGenre screen correctly renders after relaunch 1`] = `
     </div>
     <div
       className="game__mistakes"
-    >
-      <div
-        className="wrong"
-      />
-      <div
-        className="wrong"
-      />
-      <div
-        className="wrong"
-      />
-    </div>
+    />
   </header>
   <section
     className="game__screen"
@@ -94,13 +84,14 @@ exports[`GuessGenre screen correctly renders after relaunch 1`] = `
       >
         <button
           className="track__button track__button--play"
+          disabled={true}
+          onClick={[Function]}
           type="button"
         />
         <div
           className="track__status"
         >
           <audio
-            preload="none"
             src=" "
           />
         </div>

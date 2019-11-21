@@ -12,6 +12,8 @@ it(`GuessSinger change event`, () => {
 
   const guessSinger = shallow(
       <GuessSinger
+        mistakes={0}
+        timeLeft={0}
         questionId={0}
         song={{
           src: ` `,
