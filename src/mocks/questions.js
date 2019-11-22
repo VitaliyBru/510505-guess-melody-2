@@ -45,6 +45,6 @@ export const questions = [
 ];
 
 export const gameSettings = {
-  timeLimits: 5,
+  timeLimits: 0.1,
   mistakesLimits: 3,
 };

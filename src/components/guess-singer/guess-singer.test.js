@@ -28,6 +28,7 @@ it(`GuessSinger correctly renders after relaunch`, () => {
           onAnswerClick={
             jest.fn()
           }
+          setTimeLeft={() => {}}
         />,
         {createNodeMock}
     )

@@ -6,10 +6,11 @@ it(`App correctly renders after relaunch`, () => {
   const tree = renderer
     .create(
         <App
+          setTimeLeft={() => {}}
           onUserAnswer={() => {}}
           onGreetingScreenClick={() => {}}
           decrementTimeByOneSec={() => {}}
-          setTimer={() => {}}
+          setTimeLeftr={() => {}}
           timeLeft={0}
           step={-1}
           mistakes={0}

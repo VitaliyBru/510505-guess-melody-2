@@ -7,7 +7,11 @@ Enzyme.configure({adapter: new Adapter()});
 
 it(`TimerValue show correct data`, () => {
   const timerValue = shallow(
-      <TimerValue timeLeft={74}/>
+      <TimerValue
+        timeLeft={74}
+        setTimeLeft={() => {}}
+        onTimeRunOut={() => {}}
+      />
   );
 
   expect(timerValue.find(`.timer__mins`).text()).toEqual(`01`);

@@ -34,21 +34,10 @@ const ActionCreator = {
     };
   },
 
-  setTimer: (timeLimits) => ({
-    type: `SET_TIMER`,
+  setTimeLeft: (timeLimits) => ({
+    type: `SET_TIME`,
     payload: timeLimits,
   }),
-
-  decrementTime: (timeLeft) => {
-    if (timeLeft > 1) {
-      return {
-        type: `SET_TIMER`,
-        payload: timeLeft - 1,
-      };
-    }
-
-    return {type: `RESET`};
-  },
 
   reset: () => ({type: `RESET`}),
 };
@@ -56,7 +45,7 @@ const ActionCreator = {
 const initialState = {
   step: -1,
   mistakes: 0,
-  time: 0
+  timeLeft: 1
 };
 
 const reducer = (state = initialState, action) => {
@@ -69,8 +58,8 @@ const reducer = (state = initialState, action) => {
       mistakes: state.mistakes + action.payload,
     });
 
-    case `SET_TIMER`: return Object.assign({}, state, {
-      time: action.payload,
+    case `SET_TIME`: return Object.assign({}, state, {
+      timeLeft: action.payload,
     });
 
     case `RESET`: return Object.assign({}, initialState);

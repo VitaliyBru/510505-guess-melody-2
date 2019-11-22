@@ -281,21 +281,11 @@ describe(`ActionCreator OK`, () => {
       type: `RESET`
     });
   });
-  it(`setTimer OK`, () => {
-    expect(ActionCreator.setTimer(5)).toEqual({
-      type: `SET_TIMER`,
+  it(`setTimeLeft OK`, () => {
+    expect(ActionCreator.setTimeLeft(5)).toEqual({
+      type: `SET_TIME`,
       payload: 5,
     });
-  });
-  it(`decrementTime OK`, () => {
-    expect(ActionCreator.decrementTime(20)).toEqual({
-      type: `SET_TIMER`,
-      payload: 19,
-    });
-  });
-  it(`decrementTime when time runs out OK`, () => {
-    expect(ActionCreator.decrementTime(0))
-      .toEqual({type: `RESET`});
   });
   it(`reset return correct value`, () => {
     expect(ActionCreator.reset())
@@ -314,7 +304,7 @@ describe(`reducer OK`, () => {
       .toEqual({
         step: 0,
         mistakes: 0,
-        time: 0,
+        timeLeft: 1,
       });
   });
   it(`increment mistakes by 0`, () => {
@@ -327,7 +317,7 @@ describe(`reducer OK`, () => {
       .toEqual({
         step: -1,
         mistakes: 0,
-        time: 0,
+        timeLeft: 1,
       });
   });
   it(`increment mistakes by 1`, () => {
@@ -340,20 +330,20 @@ describe(`reducer OK`, () => {
       .toEqual({
         step: -1,
         mistakes: 1,
-        time: 0,
+        timeLeft: 1,
       });
   });
   it(`set timer instant correct value`, () => {
     expect(reducer(
         undefined,
         {
-          type: `SET_TIMER`,
+          type: `SET_TIME`,
           payload: 300,
         }))
       .toEqual({
         step: -1,
         mistakes: 0,
-        time: 300,
+        timeLeft: 300,
       });
   });
   it(`reset correct`, () => {
@@ -369,7 +359,7 @@ describe(`reducer OK`, () => {
       .toEqual({
         step: -1,
         mistakes: 0,
-        time: 0,
+        timeLeft: 1,
       });
   });
 });

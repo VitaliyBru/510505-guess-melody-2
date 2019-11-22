@@ -16,7 +16,7 @@ export class GuessSinger extends PureComponent {
   }
 
   render() {
-    const {timeLeft, questionId, song, answers, mistakes, onAnswerClick} = this.props;
+    const {timeLeft, questionId, song, answers, mistakes, onAnswerClick, setTimeLeft} = this.props;
 
     return (
       <section className="game game--artist">
@@ -31,7 +31,7 @@ export class GuessSinger extends PureComponent {
               style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}}/>
           </svg>
 
-          <TimerValue timeLeft={timeLeft}/>
+          <TimerValue timeLeft={timeLeft} setTimeLeft={setTimeLeft} onTimeRunOut={() => {}}/>
 
           <GameMistakes mistakes={mistakes}/>
         </header>
@@ -86,5 +86,6 @@ GuessSinger.propTypes = {
     artist: PropTypes.string
   })).isRequired,
   mistakes: PropTypes.number.isRequired,
-  onAnswerClick: PropTypes.func.isRequired
+  onAnswerClick: PropTypes.func.isRequired,
+  setTimeLeft: PropTypes.func.isRequired,
 };

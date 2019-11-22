@@ -1,11 +1,15 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
+import {TimeController} from "../../moduls/timer/time-controller.js";
 
 const SEC_IN_MIN = 60;
+const ONE_SECOND = 1000;
 
 export class TimerValue extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.timerId = null;
 
     this._getTimeLeft = this._getTimeLeft.bind(this);
   }
@@ -18,6 +22,30 @@ export class TimerValue extends PureComponent {
         <span className="timer__secs">{this._getTimeLeft(`sec`)}</span>
       </div>
     );
+  }
+
+  componentDidMount() {
+    const {timeLeft, setTimeLeft, onTimeRunOut} = this.props;
+
+    const timeController = new TimeController(timeLeft, onTimeRunOut);
+    let time = 0;
+    const doOneSecondStep = () => {
+      time = timeController.runStep();
+      setTimeLeft(time);
+      if (time) {
+        this.timerId = setTimeout(doOneSecondStep, ONE_SECOND);
+      } else {
+        this.timerId = null;
+      }
+    };
+
+    this.timerId = setTimeout(doOneSecondStep, ONE_SECOND);
+  }
+
+  componentWillUnmount() {
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
   }
 
   _getTimeLeft(type) {
@@ -35,5 +63,7 @@ export class TimerValue extends PureComponent {
 }
 
 TimerValue.propTypes = {
-  timeLeft: PropTypes.number.isRequired
+  timeLeft: PropTypes.number.isRequired,
+  setTimeLeft: PropTypes.func.isRequired,
+  onTimeRunOut: PropTypes.func.isRequired,
 };

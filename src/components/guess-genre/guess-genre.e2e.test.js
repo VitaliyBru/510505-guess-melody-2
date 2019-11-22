@@ -23,6 +23,7 @@ it(`GuessGenre form submit correct`, () => {
           }
         ]}
         onAnswerClick={submitHandler}
+        setTimeLeft={() => {}}
       />
   );
 

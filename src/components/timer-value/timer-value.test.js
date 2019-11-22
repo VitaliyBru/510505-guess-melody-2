@@ -5,7 +5,11 @@ import {TimerValue} from "./timer-value.jsx";
 it(`TimerValue renderer OK`, () => {
   const tree = renderer
     .create(
-        <TimerValue timeLeft={0}/>
+        <TimerValue
+          timeLeft={0}
+          onTimeRunOut={() => {}}
+          setTimeLeft={() => {}}
+        />
     )
     .toJSON();
 

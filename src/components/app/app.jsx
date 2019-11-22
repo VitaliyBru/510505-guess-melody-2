@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import {GreetingScreen} from "../greeting-screen/greeting-screen.jsx";
 import {GuessSinger} from "../guess-singer/guess-singer.jsx";
 import {GuessGenre} from "../guess-genre/guess-genre.jsx";
+import {FailTimeScreen} from "../fail-time-screen/fail-time-screen.jsx";
 import {ActionCreator} from "../../reducer.js";
 
-const ONE_SECOND = 1000;
 const SECONDS_IN_MINUTE = 60;
 
 class App extends PureComponent {
@@ -33,7 +33,12 @@ class App extends PureComponent {
       timeLeft,
       mistakes,
       onUserAnswer,
+      setTimeLeft,
     } = props;
+
+    if (!timeLeft) {
+      return <FailTimeScreen/>;
+    }
 
     switch (currentQuestion.type) {
       case `artist`: return (
@@ -44,6 +49,7 @@ class App extends PureComponent {
           answers={currentQuestion.answers}
           mistakes={mistakes}
           onAnswerClick={(userAnswer) => onUserAnswer(userAnswer, currentQuestion, mistakes, mistakesLimits)}
+          setTimeLeft={setTimeLeft}
         />
       );
 
@@ -55,6 +61,7 @@ class App extends PureComponent {
           answers={currentQuestion.answers}
           mistakes={mistakes}
           onAnswerClick={(userAnswer) => onUserAnswer(userAnswer, currentQuestion, mistakes, mistakesLimits)}
+          setTimeLeft={setTimeLeft}
         />
       );
     }
@@ -64,10 +71,6 @@ class App extends PureComponent {
 
   constructor(props) {
     super(props);
-
-    this.timerIsRun = false;
-
-    this._runOneSecTimer = this._runOneSecTimer.bind(this);
   }
 
   render() {
@@ -75,26 +78,14 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    const {setTimer, timeLimits} = this.props;
-    setTimer(timeLimits * SECONDS_IN_MINUTE);
+    const {setTimeLeft, timeLimits} = this.props;
+    setTimeLeft(timeLimits * SECONDS_IN_MINUTE);
   }
 
   componentDidUpdate() {
-    const {step, setTimer, timeLimits} = this.props;
+    const {step, setTimeLeft, timeLimits} = this.props;
     if (step < 0) {
-      this.timerIsRun = false;
-      setTimer(timeLimits * SECONDS_IN_MINUTE);
-    } else if (!this.timerIsRun) {
-      this.timerIsRun = true;
-      setTimeout(this._runOneSecTimer, ONE_SECOND);
-    }
-  }
-
-  _runOneSecTimer() {
-    const {timeLeft, decrementTimeByOneSec, step} = this.props;
-    if (step >= 0) {
-      decrementTimeByOneSec(timeLeft);
-      setTimeout(this._runOneSecTimer, ONE_SECOND);
+      setTimeLeft(timeLimits * SECONDS_IN_MINUTE);
     }
   }
 }
@@ -108,14 +99,13 @@ App.propTypes = {
   questions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onGreetingScreenClick: PropTypes.func.isRequired,
   onUserAnswer: PropTypes.func.isRequired,
-  setTimer: PropTypes.func.isRequired,
-  decrementTimeByOneSec: PropTypes.func.isRequired,
+  setTimeLeft: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   step: state.step,
   mistakes: state.mistakes,
-  timeLeft: state.time,
+  timeLeft: state.timeLeft,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -126,9 +116,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator.incrementMistakes(userAnswer, question, mistakes, mistakesLimit));
   },
 
-  setTimer: (timeLimits) => dispatch(ActionCreator.setTimer(timeLimits)),
-
-  decrementTimeByOneSec: (timeLeft) => dispatch(ActionCreator.decrementTime(timeLeft)),
+  setTimeLeft: (timeLimits) => dispatch(ActionCreator.setTimeLeft(timeLimits)),
 });
 
 export {App};

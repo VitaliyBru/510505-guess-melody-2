@@ -23,6 +23,7 @@ it(`GuessGenre screen correctly renders after relaunch`, () => {
             }
           ]}
           onAnswerClick={jest.fn()}
+          setTimeLeft={() => {}}
         />,
         {createNodeMock}
     )

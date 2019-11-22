@@ -26,6 +26,7 @@ it(`GuessSinger change event`, () => {
           }
         ]}
         onAnswerClick={answerHandler}
+        setTimeLeft={() => {}}
       />
   );
 
